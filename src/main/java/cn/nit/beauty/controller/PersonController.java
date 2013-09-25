@@ -12,7 +12,7 @@ import cn.nit.beauty.domain.Person;
 import cn.nit.beauty.service.PersonService;
 
 @Controller
-@RequestMapping("api")
+@RequestMapping("/api")
 public class PersonController {
 
     @Autowired
