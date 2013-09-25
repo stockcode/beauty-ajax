@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+             http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/jee 
+             http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+        http://www.springframework.org/schema/util 
+             http://www.springframework.org/schema/util/spring-util-2.5.xsd
+        http://www.springframework.org/schema/aop 
+             http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+        http://www.springframework.org/schema/tx 
+             http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <context:annotation-config />
+
+    <context:component-scan base-package="cn.nit">
+    </context:component-scan>
+
+    <bean
+            class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>*ServiceImpl</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>transactionInterceptor</value>
+                <!--
+                    此处增加新的Interceptor
+                -->
+            </list>
+        </property>
+    </bean>
+
+    <bean
+            class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+        <property name="transactionInterceptor"
+                  ref="transactionInterceptor" />
+    </bean>
+
+    <bean id="transactionInterceptor"
+          class="org.springframework.transaction.interceptor.TransactionInterceptor">
+        <property name="transactionManager" ref="transactionManager"></property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="SessionFactory" />
+    </bean>
+
+    <!-- For mail settings and future properties files -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- JNDI DataSource for J2EE environments -->
+    <!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/appfuse"/>-->
+
+    
+    <bean id="dataSource"
+        class="com.mchange.v2.c3p0.ComboPooledDataSource"
+        destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.baseurl}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="testConnectionOnCheckin" value="True"></property>
+        <property name="idleConnectionTestPeriod" value="60"></property>
+    </bean>
+    
+	<bean id="SessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+                </prop>
+				<prop key="hibernate.jdbc.use_streams_for_binary">
+					true
+                </prop>
+				<prop key="hibernate.jdbc.batch_size">0</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.cache.provider_class">
+					org.hibernate.cache.EhCacheProvider
+                </prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>cn.nit.beauty.domain</value>
+			</list>
+		</property>
+	</bean>
+</beans>
