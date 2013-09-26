@@ -7,4 +7,6 @@ public interface PersonService {
 	public Person getById(Long id);
 	public void save(Person person);
     public Person getByUsername(String username);
+
+    public Boolean isExpired(String username);
 }

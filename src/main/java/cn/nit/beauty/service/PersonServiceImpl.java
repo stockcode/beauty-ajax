@@ -41,6 +41,11 @@ public class PersonServiceImpl implements PersonService {
         return null;
     }
 
+    @Override
+    public Boolean isExpired(String username) {
+        return null;
+    }
+
     private Integer randomAge() {
 		Random random = new Random();
 		return 10 + random.nextInt(100);
