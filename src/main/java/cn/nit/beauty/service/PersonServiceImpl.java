@@ -35,8 +35,13 @@ public class PersonServiceImpl implements PersonService {
 	public void save(Person person) {
         personDAO.save(person);
 	}
-	
-	private Integer randomAge() {
+
+    @Override
+    public Person getByUsername(String username) {
+        return null;
+    }
+
+    private Integer randomAge() {
 		Random random = new Random();
 		return 10 + random.nextInt(100);
 	}
