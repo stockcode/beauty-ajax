@@ -1,9 +1,11 @@
 package cn.nit.beauty.service;
 
+import java.util.Date;
 import java.util.Random;
 
 import cn.nit.beauty.dao.PersonDAO;
 import cn.nit.beauty.domain.Person;
+import com.googlecode.genericdao.search.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +34,15 @@ public class PersonServiceImpl implements PersonService {
 	}
 	
 	@Override
-	public void save(Person person) {
+	public Person save(Person person) {
+        if (person.getPkid() == null) {
+            person.setRegDate(new Date());
+            person.setScore(100);
+        }
+
         personDAO.save(person);
+
+        return person;
 	}
 
     @Override
@@ -44,6 +53,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Boolean isExpired(String username) {
         return null;
+    }
+
+    @Override
+    public Person login(Person person) {
+        return personDAO.searchUnique(new Search().addFilterEqual("username", person.getUsername())
+                .addFilterEqual("passwd", person.getPasswd()));
+
     }
 
     private Integer randomAge() {

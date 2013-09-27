@@ -45,10 +45,15 @@ public class PersonController {
 	 * @param person
 	 * @return String indicating success or failure of save
 	 */
-	@RequestMapping(value="person", method=RequestMethod.POST)
+	@RequestMapping(value="register", method=RequestMethod.POST)
 	@ResponseBody
-	public String savePerson(Person person) {
-		personService.save(person);
-		return "Saved person: " + person.toString();
+	public Person savePerson(Person person) {
+		return personService.save(person);
 	}
+
+    @RequestMapping(value="login", method=RequestMethod.POST)
+    @ResponseBody
+    public Person Login(Person person) {
+        return personService.login(person);
+    }
 }

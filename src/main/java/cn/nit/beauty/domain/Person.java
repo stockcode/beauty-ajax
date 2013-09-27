@@ -1,5 +1,7 @@
 package cn.nit.beauty.domain;
 
+import cn.nit.beauty.Utils;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,6 +15,8 @@ public class Person {
     private Date regDate;
     private Date expiredDate;
     private Integer score;
+    private String email;
+    private String phone;
 
     @Id
     @GeneratedValue
@@ -70,15 +74,35 @@ public class Person {
         this.score = score;
     }
 
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Person{");
         sb.append("pkid=").append(pkid);
         sb.append(", username='").append(username).append('\'');
         sb.append(", passwd='").append(passwd).append('\'');
-        sb.append(", regDate=").append(regDate);
-        sb.append(", expiredDate=").append(expiredDate);
+        sb.append(", regDate=").append(Utils.formatDate(regDate));
+        sb.append(", expiredDate=").append(Utils.formatDate(expiredDate));
         sb.append(", score=").append(score);
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", phone='").append(phone).append('\'');
         sb.append('}');
         return sb.toString();
     }
