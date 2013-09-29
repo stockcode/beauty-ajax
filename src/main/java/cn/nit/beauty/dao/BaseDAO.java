@@ -26,7 +26,7 @@ import com.googlecode.genericdao.search.Search;
  * 
  * @author gengke
  */
-public class BaseDAO<T> extends GenericDAOImpl<T, String> implements GenericDAO<T, String> {
+public class BaseDAO<T> extends GenericDAOImpl<T, Integer> implements GenericDAO<T, Integer> {
 	@Autowired
 	@Override
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -42,10 +42,5 @@ public class BaseDAO<T> extends GenericDAOImpl<T, String> implements GenericDAO<
 	
 	public List<T> findByProperty(String propertyName, Object propertyValue) {
 		return search(new Search().addFilterEqual(propertyName, propertyValue));
-	}
-	
-	public T findByName(String name) {
-		List<T> list = search(new Search().addFilterEqual("name", name));
-		return list.size() == 0 ? null : list.get(0);
 	}
 }

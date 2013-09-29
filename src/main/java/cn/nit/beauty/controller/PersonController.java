@@ -26,7 +26,7 @@ public class PersonController {
 	
 	@RequestMapping("person/{id}")
 	@ResponseBody
-	public Person getById(@PathVariable Long id) {
+	public Person getById(@PathVariable Integer id) {
 		return personService.getById(id);
 	}
 	
@@ -35,7 +35,7 @@ public class PersonController {
 	 */
 	@RequestMapping(value="person", params="id")
 	@ResponseBody
-	public Person getByIdFromParam(@RequestParam("id") Long id) {
+	public Person getByIdFromParam(@RequestParam("id") Integer id) {
 		return personService.getById(id);
 	}
 	

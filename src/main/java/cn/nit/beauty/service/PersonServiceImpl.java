@@ -26,16 +26,18 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person getById(Long id) {
-		Person person = new Person();
-		//person.setName(names[id.intValue()]);
-		//person.setAge(50);
-		return person;
+	public Person getById(Integer id) {
+        return personDAO.find(id);
 	}
 	
 	@Override
 	public Person save(Person person) {
         if (person.getPkid() == null) {
+            if (personDAO.findByUsername(person.getUsername()) != null) {
+                person.setErr(person.getUsername() + "用户名已存在");
+                return person;
+            }
+
             person.setRegDate(new Date());
             person.setScore(100);
         }

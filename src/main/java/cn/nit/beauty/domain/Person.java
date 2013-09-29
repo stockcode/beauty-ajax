@@ -18,6 +18,8 @@ public class Person {
     private String email;
     private String phone;
 
+    private String err;
+
     @Id
     @GeneratedValue
     @Column(name = "pkid", unique = true, nullable = false)
@@ -90,6 +92,15 @@ public class Person {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Transient
+    public String getErr() {
+        return err;
+    }
+
+    public void setErr(String err) {
+        this.err = err;
     }
 
     @Override
