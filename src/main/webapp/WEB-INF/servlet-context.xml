@@ -10,9 +10,10 @@
     <!-- Enable @Controller annotation support -->
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
-            <bean
-                class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"
-                >
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                                 <constructor-arg value="UTF-8" />
+                             </bean>
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="objectMapper" ref="customObjectMapper"></property>
             </bean>
         </mvc:message-converters>

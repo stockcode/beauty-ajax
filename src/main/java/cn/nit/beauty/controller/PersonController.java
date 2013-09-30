@@ -27,7 +27,7 @@ public class PersonController {
 	@RequestMapping("person/{id}")
 	@ResponseBody
 	public Person getById(@PathVariable Integer id) {
-		return personService.getById(id);
+		return  personService.getById(id);
 	}
 	
 	/* same as above method, but is mapped to
