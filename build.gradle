@@ -4,23 +4,23 @@ apply plugin: 'eclipse-wtp'
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.6'
+    gradleVersion = '1.12'
 }
 
 repositories {
-   mavenCentral()
-   mavenLocal()
+	mavenLocal()
+   mavenCentral()   
 }
 
 dependencies {
    providedCompile 'javax.servlet:servlet-api:2.5'
-    compile 'org.hibernate:hibernate-core:3.3.1.GA'
-    compile 'org.hibernate:hibernate-annotations:3.3.1.GA'
-    compile 'org.hibernate:hibernate-ehcache:3.3.1.GA'
+    compile 'org.hibernate:hibernate-core:3.6.10.Final'
+    compile 'org.hibernate:hibernate-annotations:3.5.6-Final'
+    compile 'org.hibernate:hibernate-ehcache:3.6.10.Final'
     compile 'org.hibernate:ejb3-persistence:1.0.2.GA'
     compile 'org.slf4j:slf4j-jdk14:1.7.5'
-    compile 'org.springframework:spring-webmvc:3.2.2.RELEASE'
-    compile 'org.springframework:spring-orm:3.2.2.RELEASE'
+    compile 'org.springframework:spring-webmvc:4.0.6.RELEASE'
+    compile 'org.springframework:spring-orm:4.0.6.RELEASE'
    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
     compile 'javax.transaction:jta:1.1'
     compile 'com.googlecode.genericdao:dao-hibernate:1.0.0'

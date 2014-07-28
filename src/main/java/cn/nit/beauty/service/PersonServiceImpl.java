@@ -1,11 +1,14 @@
 package cn.nit.beauty.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
 import cn.nit.beauty.dao.PersonDAO;
 import cn.nit.beauty.domain.Person;
+
 import com.googlecode.genericdao.search.Search;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +40,14 @@ public class PersonServiceImpl implements PersonService {
                 person.setErr(person.getUsername() + "用户名已存在");
                 return person;
             }
-
-            person.setRegDate(new Date());
+            Calendar calendar = Calendar.getInstance();  
+            Date regDate = calendar.getTime();
+            
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+            Date expiredDate = calendar.getTime();
+            
+            person.setRegDate(regDate);
+            person.setExpiredDate(expiredDate);
             person.setScore(100);
         }
 
