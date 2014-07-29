@@ -1,6 +1,7 @@
 package cn.nit.beauty.domain;
 
 import cn.nit.beauty.Utils;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,25 +10,27 @@ import java.util.Date;
 @Table(name = "person")
 public class Person {
 
-    private Integer pkid;
+    private String pkid;
 	private String username;
 	private String passwd;
     private Date regDate;
     private Date expiredDate;
     private Integer score;
+    private Integer type;
     private String email;
     private String phone;
 
     private String err;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid2")
     @Column(name = "pkid", unique = true, nullable = false)
-    public Integer getPkid() {
+    public String getPkid() {
         return pkid;
     }
 
-    public void setPkid(Integer pkid) {
+    public void setPkid(String pkid) {
         this.pkid = pkid;
     }
 
@@ -94,6 +97,15 @@ public class Person {
         this.phone = phone;
     }
 
+    @Column(name = "type")
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     @Transient
     public String getErr() {
         return err;
@@ -106,14 +118,16 @@ public class Person {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Person{");
-        sb.append("pkid=").append(pkid);
+        sb.append("pkid='").append(pkid).append('\'');
         sb.append(", username='").append(username).append('\'');
         sb.append(", passwd='").append(passwd).append('\'');
-        sb.append(", regDate=").append(Utils.formatDate(regDate));
-        sb.append(", expiredDate=").append(Utils.formatDate(expiredDate));
+        sb.append(", regDate=").append(regDate);
+        sb.append(", expiredDate=").append(expiredDate);
         sb.append(", score=").append(score);
+        sb.append(", type=").append(type);
         sb.append(", email='").append(email).append('\'');
         sb.append(", phone='").append(phone).append('\'');
+        sb.append(", err='").append(err).append('\'');
         sb.append('}');
         return sb.toString();
     }

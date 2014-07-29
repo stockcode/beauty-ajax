@@ -29,7 +29,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person getById(Integer id) {
+	public Person getById(String id) {
         return personDAO.find(id);
 	}
 	
@@ -40,15 +40,17 @@ public class PersonServiceImpl implements PersonService {
                 person.setErr(person.getUsername() + "用户名已存在");
                 return person;
             }
-            Calendar calendar = Calendar.getInstance();  
+            Calendar calendar = Calendar.getInstance();
             Date regDate = calendar.getTime();
-            
+
             calendar.add(Calendar.DAY_OF_MONTH, 7);
             Date expiredDate = calendar.getTime();
-            
+
             person.setRegDate(regDate);
             person.setExpiredDate(expiredDate);
             person.setScore(100);
+            person.setType(0);
+            person.setErr("success");
         }
 
         personDAO.save(person);

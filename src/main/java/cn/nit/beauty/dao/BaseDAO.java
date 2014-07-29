@@ -26,7 +26,7 @@ import com.googlecode.genericdao.search.Search;
  * 
  * @author gengke
  */
-public class BaseDAO<T> extends GenericDAOImpl<T, Integer> implements GenericDAO<T, Integer> {
+public class BaseDAO<T> extends GenericDAOImpl<T, String> implements GenericDAO<T, String> {
 	@Autowired
 	@Override
 	public void setSessionFactory(SessionFactory sessionFactory) {
