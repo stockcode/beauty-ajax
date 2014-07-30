@@ -70,9 +70,47 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person login(Person person) {
+        System.err.println(person);
+
         return personDAO.searchUnique(new Search().addFilterEqual("username", person.getUsername())
                 .addFilterEqual("passwd", person.getPasswd()));
 
+    }
+
+    @Override
+    public String Notify(String id, String type, String tradeno) {
+        Person person = personDAO.find(id);
+
+        if (person == null) return "not found";
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (type.equals("0.1")) {
+            if (person.getType() != 0) return "type err";
+
+            person.setType(1);
+
+            calendar.setTime(person.getExpiredDate());
+            calendar.add(Calendar.MONTH, 1);
+
+            person.setExpiredDate(calendar.getTime());
+            personDAO.save(person);
+        } else if (type.equals("10")) {
+            calendar.setTime(person.getExpiredDate());
+            calendar.add(Calendar.MONTH, 1);
+
+            person.setExpiredDate(calendar.getTime());
+            personDAO.save(person);
+        } else if (type.equals("100")) {
+            calendar.setTime(person.getExpiredDate());
+            calendar.add(Calendar.YEAR, 1);
+
+            person.setExpiredDate(calendar.getTime());
+        } else {
+            return "err";
+        }
+
+        return "success" + tradeno;
     }
 
     private Integer randomAge() {

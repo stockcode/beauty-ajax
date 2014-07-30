@@ -11,4 +11,6 @@ public interface PersonService {
     public Boolean isExpired(String username);
 
     public Person login(Person person);
+
+    String Notify(String id, String type, String tradeno);
 }

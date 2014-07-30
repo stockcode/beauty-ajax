@@ -1,5 +1,6 @@
 package cn.nit.beauty;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,8 +26,10 @@ public class CustomObjectMapper extends ObjectMapper {
                                   JsonGenerator jsonGenerator,
                                   SerializerProvider provider)
                     throws IOException, JsonProcessingException {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d ah:mm:ss");
-                jsonGenerator.writeString(sdf.format(value));
+                DateFormat localFormat
+                        = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT);
+                jsonGenerator.writeString(localFormat.format(value));
+
             }
         });
         this.setSerializerFactory(factory);

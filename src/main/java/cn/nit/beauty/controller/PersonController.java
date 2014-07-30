@@ -56,4 +56,10 @@ public class PersonController {
     public Person Login(Person person) {
         return personService.login(person);
     }
+
+    @RequestMapping(value="notify")
+    @ResponseBody
+    public String Notify(@RequestParam("sessionid") String sessionid, @RequestParam("type") String type, @RequestParam("tradeno") String tradeno) {
+        return personService.Notify(sessionid, type, tradeno);
+    }
 }
