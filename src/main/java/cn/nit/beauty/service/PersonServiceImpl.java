@@ -4,7 +4,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import cn.nit.beauty.dao.OrderDAO;
 import cn.nit.beauty.dao.PersonDAO;
+import cn.nit.beauty.domain.Order;
 import cn.nit.beauty.domain.Person;
 
 import com.googlecode.genericdao.search.Search;
@@ -17,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PersonServiceImpl implements PersonService {
     @Autowired
     PersonDAO personDAO;
-
-	String[] names = {"Nikolaus Otto", "Robert Ford", "Gottlieb Daimler", "Lt. General Masaharu Homma"};
+    @Autowired
+    OrderDAO orderDAO;
 
 	@Override
 	public Person getRandom() {
@@ -81,46 +83,39 @@ public class PersonServiceImpl implements PersonService {
     public String Notify(String id, String type, String tradeno) {
         Person person = personDAO.find(id);
 
-        if (person == null) return "not found";
+        if (person == null) return "success";
+
+        Order order = new Order();
+
+        order.setUsername(person.getUsername());
+        order.setTradeno(tradeno);
+        order.setTotalfee(type);
+        order.setOrderdate(new Date());
+        orderDAO.save(order);
 
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(person.getExpiredDate());
 
         if (type.equals("0.1")) {
-            if (person.getType() != 0) return "type err";
+            if (person.getType() != 0) return "success";
 
             person.setType(1);
-
-            calendar.setTime(person.getExpiredDate());
             calendar.add(Calendar.MONTH, 1);
-
             person.setExpiredDate(calendar.getTime());
-            personDAO.save(person);
         } else if (type.equals("10")) {
-            calendar.setTime(person.getExpiredDate());
             calendar.add(Calendar.MONTH, 1);
-
             person.setExpiredDate(calendar.getTime());
-            personDAO.save(person);
         } else if (type.equals("100")) {
-            calendar.setTime(person.getExpiredDate());
             calendar.add(Calendar.YEAR, 1);
-
             person.setExpiredDate(calendar.getTime());
         } else {
-            return "err";
+            return "success";
         }
 
-        return "success" + tradeno;
+        personDAO.save(person);
+
+        return "success";
     }
 
-    private Integer randomAge() {
-		Random random = new Random();
-		return 10 + random.nextInt(100);
-	}
-
-	private String randomName() {
-		Random random = new Random();
-		return names[random.nextInt(names.length)];
-	}
 
 }
