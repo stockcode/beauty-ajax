@@ -14,6 +14,7 @@ public class Person {
 
     private String pkid;
 	private String username;
+    private String nickname;
 	private String passwd;
     private Date regDate;
     private Date expiredDate;
@@ -21,6 +22,7 @@ public class Person {
     private Integer type;
     private String email;
     private String phone;
+
 
     private String err;
 
@@ -106,6 +108,15 @@ public class Person {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    @Column(name = "nickname")
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     @Transient

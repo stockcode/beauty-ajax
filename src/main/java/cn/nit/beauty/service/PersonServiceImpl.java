@@ -48,6 +48,8 @@ public class PersonServiceImpl implements PersonService {
             calendar.add(Calendar.DAY_OF_MONTH, 7);
             Date expiredDate = calendar.getTime();
 
+            if (person.getNickname().equals("")) person.setNickname(person.getUsername());
+
             person.setRegDate(regDate);
             person.setExpiredDate(expiredDate);
             person.setScore(100);
@@ -74,9 +76,14 @@ public class PersonServiceImpl implements PersonService {
     public Person login(Person person) {
         System.err.println(person);
 
-        return personDAO.searchUnique(new Search().addFilterEqual("username", person.getUsername())
+        Person loginPerson = personDAO.searchUnique(new Search().addFilterEqual("username", person.getUsername())
                 .addFilterEqual("passwd", person.getPasswd()));
 
+        if (person.getErr().equals("QQ") && loginPerson == null) {
+            return save(person);
+        } else {
+            return loginPerson;
+        }
     }
 
     @Override
