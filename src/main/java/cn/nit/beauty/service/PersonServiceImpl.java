@@ -79,11 +79,10 @@ public class PersonServiceImpl implements PersonService {
         Person loginPerson = personDAO.searchUnique(new Search().addFilterEqual("username", person.getUsername())
                 .addFilterEqual("passwd", person.getPasswd()));
 
-        if (person.getErr().equals("QQ") && loginPerson == null) {
-            return save(person);
-        } else {
-            return loginPerson;
-        }
+        if (loginPerson != null) return loginPerson;
+        else if (person.getLogintype().equals("QQ")) return save(person);
+
+        return null;
     }
 
     @Override

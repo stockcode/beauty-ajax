@@ -22,6 +22,7 @@ public class Person {
     private Integer type;
     private String email;
     private String phone;
+    private String logintype;
 
 
     private String err;
@@ -117,6 +118,15 @@ public class Person {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Column(name = "logintype")
+    public String getLogintype() {
+        return logintype;
+    }
+
+    public void setLogintype(String logintype) {
+        this.logintype = logintype;
     }
 
     @Transient
