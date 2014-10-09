@@ -80,7 +80,7 @@ public class PersonServiceImpl implements PersonService {
                 .addFilterEqual("passwd", person.getPasswd()));
 
         if (loginPerson != null) return loginPerson;
-        else if (person.getLogintype().equals("QQ")) return save(person);
+        else if (person.getLogintype().equals("QQ") || person.getLogintype().equals("WEIXIN")) return save(person);
 
         return null;
     }
