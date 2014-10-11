@@ -34,6 +34,6 @@ dependencies {
 
 jettyRunWar.contextPath = '' //otherwise defaults to name of project
 
-tasks.withType(Compile) {
+tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

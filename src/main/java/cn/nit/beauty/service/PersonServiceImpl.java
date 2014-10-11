@@ -14,6 +14,7 @@ import com.googlecode.genericdao.search.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -48,7 +49,7 @@ public class PersonServiceImpl implements PersonService {
             calendar.add(Calendar.DAY_OF_MONTH, 7);
             Date expiredDate = calendar.getTime();
 
-            if (person.getNickname().equals("")) person.setNickname(person.getUsername());
+            if (StringUtils.isEmpty(person.getNickname())) person.setNickname(person.getUsername());
 
             person.setRegDate(regDate);
             person.setExpiredDate(expiredDate);
