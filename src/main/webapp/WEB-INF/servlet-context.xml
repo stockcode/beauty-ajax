@@ -13,13 +13,9 @@
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
                                  <constructor-arg value="UTF-8" />
                              </bean>
-            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-                <property name="objectMapper" ref="customObjectMapper"></property>
-            </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <bean id="customObjectMapper" class="cn.nit.beauty.CustomObjectMapper" />
 
     <!-- Map simple view name such as "test" into /WEB-INF/views/test.jsp -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -27,6 +23,4 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- Activates annotation based transaction management -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>

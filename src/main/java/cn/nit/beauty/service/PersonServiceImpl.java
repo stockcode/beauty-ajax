@@ -3,14 +3,15 @@ package cn.nit.beauty.service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import cn.nit.beauty.domain.Pay;
 
-import cn.nit.beauty.dao.OrderDAO;
-import cn.nit.beauty.dao.PersonDAO;
-import cn.nit.beauty.domain.Order;
-import cn.nit.beauty.domain.Person;
+import com.google.gson.Gson;
 
-import com.googlecode.genericdao.search.Search;
-
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,108 +19,32 @@ import org.springframework.util.StringUtils;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-    @Autowired
-    PersonDAO personDAO;
-    @Autowired
-    OrderDAO orderDAO;
 
-	@Override
-	public Person getRandom() {
-		Person person = new Person();
-		//person.setName(randomName());
-		//person.setAge(randomAge());
-		return person;
-	}
-
-	@Override
-	public Person getById(String id) {
-        return personDAO.find(id);
-	}
-	
-	@Override
-	public Person save(Person person) {
-        if (person.getPkid() == null) {
-            if (personDAO.findByUsername(person.getUsername()) != null) {
-                person.setErr(person.getUsername() + "用户名已存在");
-                return person;
-            }
-            Calendar calendar = Calendar.getInstance();
-            Date regDate = calendar.getTime();
-
-            calendar.add(Calendar.DAY_OF_MONTH, 7);
-            Date expiredDate = calendar.getTime();
-
-            if (StringUtils.isEmpty(person.getNickname())) person.setNickname(person.getUsername());
-
-            person.setRegDate(regDate);
-            person.setExpiredDate(expiredDate);
-            person.setScore(100);
-            person.setType(0);
-            person.setErr("success");
-        }
-
-        personDAO.save(person);
-
-        return person;
-	}
-
-    @Override
-    public Person getByUsername(String username) {
-        return null;
-    }
-
-    @Override
-    public Boolean isExpired(String username) {
-        return null;
-    }
-
-    @Override
-    public Person login(Person person) {
-        System.err.println(person);
-
-        Person loginPerson = personDAO.searchUnique(new Search().addFilterEqual("username", person.getUsername())
-                .addFilterEqual("passwd", person.getPasswd()));
-
-        if (loginPerson != null) return loginPerson;
-        else if (person.getLogintype().equals("QQ") || person.getLogintype().equals("WEIXIN")) return save(person);
-
-        return null;
-    }
+    Gson gson = new Gson();
 
     @Override
     public String Notify(String id, String type, String tradeno) {
-        Person person = personDAO.find(id);
 
-        if (person == null) return "success";
+        Unirest.setDefaultHeader("X-Bmob-Application-Id",
+                "19fee4b5da44fc283e4c58e9f860ea96");
+        Unirest.setDefaultHeader("X-Bmob-REST-API-Key",
+                "2c8b047dd9e5f8b9d18cb908bd200b48");
+        Unirest.setDefaultHeader("Content-Type", "application/json");
 
-        Order order = new Order();
+        Pay pay = new Pay(id, type, tradeno);
 
-        order.setUsername(person.getUsername());
-        order.setTradeno(tradeno);
-        order.setTotalfee(type);
-        order.setOrderdate(new Date());
-        orderDAO.save(order);
+        HttpResponse<String> result = null;
+        try {
+            result = Unirest
+                    .post("https://api.bmob.cn/1/functions/pay").body(gson.toJson(pay)).asString();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(person.getExpiredDate());
+            String resp = result.getBody();
 
-        if (type.equals("0.1")) {
-            if (person.getType() != 0) return "success";
-
-            person.setType(1);
-            calendar.add(Calendar.MONTH, 1);
-            person.setExpiredDate(calendar.getTime());
-        } else if (type.equals("10")) {
-            calendar.add(Calendar.MONTH, 1);
-            person.setExpiredDate(calendar.getTime());
-        } else if (type.equals("100")) {
-            calendar.add(Calendar.YEAR, 1);
-            person.setExpiredDate(calendar.getTime());
-        } else {
-            return "success";
+            System.err.println(resp);
+        } catch (UnirestException e) {
+            e.printStackTrace();
         }
 
-        personDAO.save(person);
 
         return "success";
     }
